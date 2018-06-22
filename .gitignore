@@ -1,0 +1,8 @@
+#obvio que si
+/node_modules
+
+#archivo personal para acordarme que estaba haciendo
+pendientes.txt
+
+#base de datos creada por sqlite
+stocktaking.db

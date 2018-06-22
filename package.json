@@ -1,0 +1,65 @@
+{
+  "name": "inventario",
+  "version": "1.0.0",
+  "description": "una aplicacion de escritorio de inventario",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "install-app-deps",
+    "start": "cross-env NODE_ENV=development electron . ",
+    "build-win": "electron-forge package --platform=win32 --arch=ia32",
+    "build-linux": "electron-forge package --platform=linux --arch=x64",
+    "make": "electron-forge make"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "brian bustos <larous25@hotmail.es>",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.1.0",
+    "electron": "^1.8.4",
+    "eslint": "^4.19.1",
+    "sqlite3": "^4.0.0",
+    "vue": "^2.5.16",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "cross-env": "^5.1.5",
+    "electron-builder": "^20.8.1"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "dmg"
+        ],
+        "linux": [
+          "deb"
+        ]
+      },
+      "electronPackagerConfig": {
+        "asar": true,
+        "icon": "src/assets/icons/main-icon"
+      },
+      "electronInstallerDMG": {
+        "icon": "src/assets/icons/main-icon.icns"
+      },
+      "electronWinstallerConfig": {
+        "name": ""
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": ""
+      }
+    }
+  }
+}

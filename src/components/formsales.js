@@ -1,13 +1,13 @@
 /* globals Vue */
-const productstablecomponent = require('./productstable');
-const paginationcomponent = require('./pagination');
-const shopcartproductcomponent = require('./shopcartproduct');
+const productstablecomponent = require('./productstable')
+const paginationcomponent = require('./pagination')
+const shopcartproductcomponent = require('./shopcartproduct')
 
-const { dialog } = require('electron').remote;
+const { dialog } = require('electron').remote
 
-const { mapState } = require('vuex');
+const { mapState } = require('vuex')
 
-let template = `
+const template = `
 <div>
     <div>
 
@@ -93,75 +93,74 @@ let template = `
     </div>
 </div>
 
-`;
-
+`
 
 module.exports = Vue.component('formSales-component', {
-	components: {
-		productstablecomponent,
-		paginationcomponent,
-		shopcartproductcomponent
-	},
-	template,
-	props: {
-		shopcart: {
-			type: Object,
-			default: () => ({
-				comments: ''
-			})
-		}
-	},
-	created() {
-		this.$store.commit('restartcart');
-		
-		if (this.shopcart.sale)
-			this.$store.dispatch('loadproductshassales', this.shopcart);
+  components: {
+    productstablecomponent,
+    paginationcomponent,
+    shopcartproductcomponent
+  },
+  template,
+  props: {
+    shopcart: {
+      type: Object,
+      default: () => ({
+        comments: ''
+      })
+    }
+  },
+  created () {
+    this.$store.commit('restartcart')
 
-		this.$store.dispatch('getquantity', 'PRODUCTS');
-	},
-	methods: {
-		send() {
-			if (this.amount <= 0) {
-				dialog.showMessageBox({
-					type: 'info',
-					buttons: ['Aceptar'],
-					title: 'Para guardar seleccione al menos un producto.',
-					message: 'Por favor seleccione algún producto ante de guardar.'
-				});
+    if (this.shopcart.sale) { this.$store.dispatch('loadproductshassales', this.shopcart) }
 
-				return;
-			}
+    this.$store.dispatch('getquantity', 'PRODUCTS')
+  },
+  methods: {
+    send () {
+      if (this.amount <= 0) {
+        dialog.showMessageBox({
+          type: 'info',
+          buttons: ['Aceptar'],
+          title: 'Para guardar seleccione al menos un producto.',
+          message: 'Por favor seleccione algún producto ante de guardar.'
+        })
 
-			let action = '';
-			let data = {};
-			if (this.$route.path == '/newsale') {
-				action ='sendsale';
-				data.comments = this.shopcart.comments;
-			} else {
-				action = 'updatesale';
-				data.sale = this.shopcart.sale;
-				data.comments = this.shopcart.comments;
-			}
-			
-			this.$store.dispatch(action, { data, cb: (err) => {
-				if(err) throw(err);
+        return
+      }
 
-				this.$router.push('/sales');
-			}});	
+      let action = ''
+      const data = {}
+      if (this.$route.path === '/newsale') {
+        action = 'sendsale'
+        data.comments = this.shopcart.comments
+      } else {
+        action = 'updatesale'
+        data.sale = this.shopcart.sale
+        data.comments = this.shopcart.comments
+      }
 
-		},
-		setfrom(f, p) {
-			this.$store.commit('setfrom', { f, p });
-		}
-	},
-	computed: mapState([
-		'productshassale',
-		'amount',
-		'total',
-		'page',
-		'quantity',
-		'from',
-		'quantitytoload'
-	])
-});
+      this.$store.dispatch(action, {
+        data,
+        cb: (err) => {
+          if (err) throw (err)
 
+          this.$router.push('/sales')
+        }
+      })
+    },
+    setfrom (f, p) {
+      this.$store.commit('setfrom', { f, p })
+    }
+  },
+  computed: mapState([
+    'productshassale',
+    'amount',
+    'total',
+    'page',
+    'quantity',
+    'from',
+    'quantitytoload'
+  ])
+})

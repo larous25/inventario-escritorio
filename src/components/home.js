@@ -1,12 +1,12 @@
 /* globals Vue */
 
-const { mapState } = require('vuex');
+const { mapState } = require('vuex')
 
-const productstablecomponent = require('./productstable');
-const salestablecomponent = require('./salestable');
-const paginationcomponent = require('./pagination');
+const productstablecomponent = require('./productstable')
+const salestablecomponent = require('./salestable')
+const paginationcomponent = require('./pagination')
 
-let template = `
+const template = `
 <div class="container">
     <header class="navbar navbar-dark bg-light">
     <nav class="nav nav-pills nav-fill  ">
@@ -46,38 +46,37 @@ let template = `
 		<paginationcomponent :quantity="quantity" :quantitytoload="quantitytoload" :page="page" @setfrom="setfrom"  />
 	</div>
 	</div>
-`;
-
+`
 
 module.exports = Vue.component('home-component', {
-	components: {
-		productstablecomponent,
-		salestablecomponent,
-		paginationcomponent
-	},
-	template,
-	created() {
-		this.getquantity();
-	},
-	methods:{ 
-		setfrom(f,p) {
-			this.$store.commit('setfrom', { f, p });
-		},
-		getquantity() {
-			this.$store.dispatch('getquantity', (this.$route.path == '/products') ? 'PRODUCTS' : 'SALES' );
-		}
-	},
-	computed: mapState([
-		'page',
-		'quantity',
-		'from',
-		'quantitytoload',
-		'options'
-	]),
-	watch: {
-		'$route': 'getquantity'
-	}
-});
+  components: {
+    productstablecomponent,
+    salestablecomponent,
+    paginationcomponent
+  },
+  template,
+  created () {
+    this.getquantity()
+  },
+  methods: {
+    setfrom (f, p) {
+      this.$store.commit('setfrom', { f, p })
+    },
+    getquantity () {
+      this.$store.dispatch('getquantity', (this.$route.path == '/products') ? 'PRODUCTS' : 'SALES')
+    }
+  },
+  computed: mapState([
+    'page',
+    'quantity',
+    'from',
+    'quantitytoload',
+    'options'
+  ]),
+  watch: {
+    $route: 'getquantity'
+  }
+})
 
 // nota: buscar que coinsidan las propiedades
 // que no se descuenten productos al actualizar

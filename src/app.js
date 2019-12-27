@@ -1,15 +1,14 @@
 /* globals Vue */
 
-global.Vue = require('vue/dist/vue');
+global.Vue = require('vue/dist/vue')
 
-let VueRouter = require('vue-router/dist/vue-router');
-let router = require('./router');
-let store = require('./store');
+const VueRouter = require('vue-router/dist/vue-router')
+const router = require('./router')
+const store = require('./store')
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 new Vue({
-	router,
-	store
-}).$mount('#app');
-
+  router,
+  store
+}).$mount('#app')

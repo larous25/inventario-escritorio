@@ -1,8 +1,8 @@
 /* globals Vue */
 
-const { mapState } = require('vuex');
+const { mapState } = require('vuex')
 
-let template = `
+const template = `
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -66,54 +66,55 @@ let template = `
         </div>
     </div>
 </div>
-    `;
+    `
 
 module.exports = Vue.component('formProduct-component', {
-	template,
-	props: {
-		product: {
-			type: Object,
-			twoWay: true,
-			default: () => ({
-				name: '',
-				type: '',
-				amount: 0,
-				price: 0,
-				pricesale: 0,
-			})
-		}
-	},
-	computed: mapState(['isActive']),
-	methods: {
-		send() {
-			if (!this.product.name) {
-				this.$store.commit('desactive');
-				return;
-			}
-            
-			let action = (this.$route.path == '/newproduct') ? 'sendproduct' : 'updateproduct';
-			
-			this.$store.dispatch(action, { product:this.product, cb: (err) => {
-				if(err)  throw(err);
+  template,
+  props: {
+    product: {
+      type: Object,
+      twoWay: true,
+      default: () => ({
+        name: '',
+        type: '',
+        amount: 0,
+        price: 0,
+        pricesale: 0
+      })
+    }
+  },
+  computed: mapState(['isActive']),
+  methods: {
+    send () {
+      if (!this.product.name) {
+        this.$store.commit('desactive')
+        return
+      }
 
-				this.$router.push('/products');
-			}});
-                
-		},
-		checkifnumber(event, property) {
-			let value    = event.target.value.replace(/[^\d.]/g, '');
-			let number   = isNaN(value) ? 0: value;
-			let newvalue = 0;
+      const action = (this.$route.path == '/newproduct') ? 'sendproduct' : 'updateproduct'
 
-			if (/price/.test(property)) {                
-				newvalue = Math.ceil( number/ 50) * 50;
-			} else {
-				newvalue = number;
-			}
-            
-			this.product[property] = newvalue;
-			event.target.value = newvalue;
-		}
-	}
-});
+      this.$store.dispatch(action, {
+        product: this.product,
+        cb: (err) => {
+          if (err) throw (err)
 
+          this.$router.push('/products')
+        }
+      })
+    },
+    checkifnumber (event, property) {
+      const value = event.target.value.replace(/[^\d.]/g, '')
+      const number = isNaN(value) ? 0 : value
+      let newvalue = 0
+
+      if (/price/.test(property)) {
+        newvalue = Math.ceil(number / 50) * 50
+      } else {
+        newvalue = number
+      }
+
+      this.product[property] = newvalue
+      event.target.value = newvalue
+    }
+  }
+})

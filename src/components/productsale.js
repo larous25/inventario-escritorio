@@ -1,6 +1,5 @@
 /* globals Vue */
 
-
 const template = `
 <tr>
     <td scope="row">
@@ -20,27 +19,27 @@ const template = `
 		{{ product.pricesale }}
 	</td>
 </tr>
-`;
+`
 
 module.exports = Vue.component('productsale-component', {
-	template,
-	props: {
-		product: {
-			type: Object,
-			default: {
-				product: 0,
-				precio: 0,
-				priceSale: 0,
-				name: '',
-				tipo: '',
-				amount: 0,
-				sold: 0,
-			}
-		}
-	},
-	methods: {
-		add() {			
-			this.$store.commit('addproduct', this.product);
-		}
-	}
-});
+  template,
+  props: {
+    product: {
+      type: Object,
+      default: {
+        product: 0,
+        precio: 0,
+        priceSale: 0,
+        name: '',
+        tipo: '',
+        amount: 0,
+        sold: 0
+      }
+    }
+  },
+  methods: {
+    add () {
+      this.$store.commit('addproduct', this.product)
+    }
+  }
+})

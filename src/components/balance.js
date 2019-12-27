@@ -1,6 +1,6 @@
 /* globals Vue */
 
-let template = `
+const template = `
 <div class="container">
 
     <nav aria-label="breadcrumb">
@@ -20,14 +20,14 @@ let template = `
     </div>
  
 </div>
-`;
+`
 
 module.exports = Vue.component('balance-component', {
-	template,
-	data : ()  => ({}),
-	methods: {
-		back() {
-			this.$router.push({ name: 'products', list: 'products' });
-		}
-	}
-});
+  template,
+  data: () => ({}),
+  methods: {
+    back () {
+      this.$router.push({ name: 'products', list: 'products' })
+    }
+  }
+})

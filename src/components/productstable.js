@@ -1,8 +1,8 @@
 /* globals Vue */
 
-const productlistcomponent = require('./productlist');
-const productsalecomponent = require('./productsale');
-const { mapState, mapActions } = require('vuex');
+const productlistcomponent = require('./productlist')
+const productsalecomponent = require('./productsale')
+const { mapState, mapActions } = require('vuex')
 
 const template = `
 	<table class="table  table-hover table-sm">
@@ -33,32 +33,32 @@ const template = `
 		</tbody>
 
 	</table>
-`;
+`
 
 module.exports = Vue.component('producstable-component', {
-	components: {
-		productlistcomponent,
-		productsalecomponent
-	},
-	template,
-	props: {
-		from: {
-			type: Number,
-			default: 0
-		},
-		quantitytoload: {
-			type: Number,
-			default: 10
-		}
-	},
-	created() {
-		this.$store.dispatch('loadproducts');
-	},
-	methods: mapActions(['loadproducts']),
-	computed: mapState([
-		'products'
-	]),
-	watch: {
-		'from': 'loadproducts'
-	}
-});
+  components: {
+    productlistcomponent,
+    productsalecomponent
+  },
+  template,
+  props: {
+    from: {
+      type: Number,
+      default: 0
+    },
+    quantitytoload: {
+      type: Number,
+      default: 10
+    }
+  },
+  created () {
+    this.$store.dispatch('loadproducts')
+  },
+  methods: mapActions(['loadproducts']),
+  computed: mapState([
+    'products'
+  ]),
+  watch: {
+    from: 'loadproducts'
+  }
+})

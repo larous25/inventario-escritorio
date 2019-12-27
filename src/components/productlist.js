@@ -1,6 +1,6 @@
 /* globals Vue */
 
-const {  dialog } = require('electron').remote;
+const { dialog } = require('electron').remote
 
 const template = `
 <tr>
@@ -21,42 +21,42 @@ const template = `
  
 
 </tr>
-`;
+`
 
 module.exports = Vue.component('products-component', {
-	template,
-	props: {
-		product: {
-			type: Object,
-			default: {
-				product: 0,
-				precio: 0,
-				priceSale: 0,
-				name: '',
-				tipo: '',
-				amount: 0,
-				sold: 0,
-			}
-		}
-	},
-	methods: {
-		remove() {	
-			dialog.showMessageBox({
-				type: 'question',
-				buttons: ['Cancelar', 'Aceptar'],
-				title: 'Porfavor confirmar',
-				message: '¿Esta seguro que desea eliminar?'
-			}, response => {
-				if(response === 1) {
-					this.$store.dispatch('removeproduct', {
-						product:this.product.product
-					});
-					this.$emit('load');
-				}
-			});
-		},
-		update() {
-			this.$router.push('/editproduct');
-		}
-	}
-});
+  template,
+  props: {
+    product: {
+      type: Object,
+      default: {
+        product: 0,
+        precio: 0,
+        priceSale: 0,
+        name: '',
+        tipo: '',
+        amount: 0,
+        sold: 0
+      }
+    }
+  },
+  methods: {
+    remove () {
+      dialog.showMessageBox({
+        type: 'question',
+        buttons: ['Cancelar', 'Aceptar'],
+        title: 'Porfavor confirmar',
+        message: '¿Esta seguro que desea eliminar?'
+      }, response => {
+        if (response === 1) {
+          this.$store.dispatch('removeproduct', {
+            product: this.product.product
+          })
+          this.$emit('load')
+        }
+      })
+    },
+    update () {
+      this.$router.push('/editproduct')
+    }
+  }
+})

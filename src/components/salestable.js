@@ -1,7 +1,7 @@
 /* globals Vue */
 
-const { mapActions, mapState } = require('vuex');
-const salescomponent = require('./sales');
+const { mapActions, mapState } = require('vuex')
+const salescomponent = require('./sales')
 
 const template = `
 <div class="container">
@@ -24,33 +24,33 @@ const template = `
 
 	</table>
 </div>
-`;
+`
 
 module.exports = Vue.component('salestable-component', {
-	components: {
-		salescomponent
-	},
-	template,
-	props: {
-		from: {
-			type: Number,
-			default: 0
-		},
-		quantitytoload: {
-			type: Number,
-			default: 10
-		}
-	},
-	created() {
-		this.$store.dispatch('loadsales');
-	},
-	methods: mapActions(['loadsales']),
-	computed: mapState([
-		'page',
-		'quantity',
-		'sales'
-	]),
-	watch: {
-		'from': 'loadsales'
-	}
-});
+  components: {
+    salescomponent
+  },
+  template,
+  props: {
+    from: {
+      type: Number,
+      default: 0
+    },
+    quantitytoload: {
+      type: Number,
+      default: 10
+    }
+  },
+  created () {
+    this.$store.dispatch('loadsales')
+  },
+  methods: mapActions(['loadsales']),
+  computed: mapState([
+    'page',
+    'quantity',
+    'sales'
+  ]),
+  watch: {
+    from: 'loadsales'
+  }
+})

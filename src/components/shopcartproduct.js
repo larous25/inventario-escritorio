@@ -35,22 +35,20 @@ const template = `
         </div>
     </div>
 
-`;
-
+`
 
 module.exports = Vue.component('shopproduct-component', {
-	template,
-	props: {
-		product: Object
-	},
-	data : () => ({}),
-	methods: {
-		add() { 
-			this.$store.commit('addproduct', this.product);
-		},
-		remove() {
-			this.$store.commit('removeproduct', this.product);
-		}
-	}
-});
-
+  template,
+  props: {
+    product: Object
+  },
+  data: () => ({}),
+  methods: {
+    add () {
+      this.$store.commit('addproduct', this.product)
+    },
+    remove () {
+      this.$store.commit('removeproduct', this.product)
+    }
+  }
+})

@@ -18,7 +18,7 @@
   "author": "brian bustos <larous25@hotmail.es>",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^4.1.0",
+    "bootstrap": "^4.3.1",
     "electron": "^1.8.4",
     "sqlite3": "^4.0.0",
     "vue": "^2.5.16",

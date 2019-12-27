@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^4.1.0",
-    "electron": "^1.8.4",
+    "electron": "^1.8.8",
     "sqlite3": "^4.0.0",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",

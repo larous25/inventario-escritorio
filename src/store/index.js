@@ -1,57 +1,56 @@
-/* globals Vue */
+import { createStore } from 'vuex'
 
-const Vuex = require('vuex')
-const Stock = require('../../models/stocktaking')
-const {
+import {
   compareids,
   findproduct
-} = require('./helpers')
-
-Vue.use(Vuex)
+} from './helpers'
 
 const one = 1
 const zero = 0
 
 const initstate = {
-  // this for pagniation component comunication
   page: one,
   quantity: zero,
   from: zero,
   quantitytoload: 10,
-  // home
+
   options: [
     { text: 'productos', link: '/products' },
     { text: 'ventas', link: '/sales' },
     { text: 'balance', link: '/balance' }
   ],
-  // this are products of table component
+
   products: [],
   sales: [],
-  // i forget =S
+
   isactive: true,
-  // these are for create and update sale
-  // then arrays are for calculate to amount for each product when create and update
+
   productscarttemp: [],
   pcartupdate: [],
   pcartnoupdate: [],
   productshassale: [],
+
   amount: zero,
   total: zero
 }
 
-module.exports = new Vuex.Store({
+export default createStore({
   state: initstate,
+
   mutations: {
     setfrom (state, payload) {
       state.from = payload.f
       state.page = payload.p
     },
+
     setquantity (state, payload) {
       state.quantity = payload
     },
+
     desactive (state) {
       state.isactive = false
     },
+
     restartcart (state) {
       state.products = []
       state.productscarttemp = []
@@ -61,6 +60,7 @@ module.exports = new Vuex.Store({
       state.amount = 0
       state.total = 0
     },
+
     removeproduct (state, payload) {
       const remove = arr => {
         const i = arr.findIndex(p => compareids(p, payload))
@@ -68,9 +68,11 @@ module.exports = new Vuex.Store({
       }
 
       const productcart = findproduct(state.productscarttemp, payload)
+
       if (productcart.amount <= one) {
         if (productcart.amount <= zero) {
           const productcart2 = findproduct(state.pcartupdate, payload)
+
           if (productcart2.amount <= one) {
             remove(state.pcartupdate)
           } else {
@@ -84,171 +86,10 @@ module.exports = new Vuex.Store({
         productcart.amount -= one
         findproduct(state.products, payload).amount += one
       }
-
-      this.commit('settotal')
-    },
-    addproduct (state, payload) {
-      const create = () => {
-        const product = Object.assign({}, payload)
-        product.amount = one
-        return product
-      }
-
-      const producttable = findproduct(state.products, payload)
-
-      if (producttable.amount <= zero) return
-
-      const productnoupdates = findproduct(state.pcartnoupdate, payload)
-      const productupdates = findproduct(state.pcartupdate, payload)
-      const productcarttemp = findproduct(state.productscarttemp, payload)
-
-      if (productcarttemp) {
-        productcarttemp.amount += one
-        producttable.amount -= one
-      } else if (!productnoupdates || (productupdates.amount > productnoupdates.amount)) {
-        state.productscarttemp.push(create())
-        producttable.amount -= one
-      } else if (productnoupdates) {
-        if (!productupdates) {
-          state.pcartupdate.push(create())
-        } else if (productupdates.amount < productnoupdates.amount) {
-          productupdates.amount = +one
-        }
-      }
-
-      this.commit('settotal')
-    },
-    settotal (state) {
-      this.commit('setproductshassale')
-      state.amount = state.productshassale.reduce((a, p) => a += p.amount, zero)
-      state.total = state.productshassale.reduce((a, p) => a += p.amount * p.pricesale, zero)
-    },
-    setproductshassale (state) {
-      const a = state.productscarttemp.map(a => a)
-      const b = state.pcartupdate.map(a => a)
-
-      // state.productshassale = a.concat(b);
-      state.productshassale = [...a, ...b]
-    },
-    settablequantities (state, payload) {
-      const a = payload.map(e => {
-        state.productscarttemp.forEach(p => {
-          if (e.product == p.product) e.amount -= p.amount
-        })
-        return e
-      })
-      state.products = a
     }
   },
+
   actions: {
-    getquantity (context, payload) {
-      Stock.getcounttable(payload, (err, quantity) => {
-        if (err) console.log('algun error', err)
-        context.commit('setquantity', quantity)
-      })
-    },
-    loadproducts ({ commit, state }) {
-      const options = {
-        table: 'PRODUCTS',
-        q: state.quantitytoload,
-        f: state.from,
-        id: 'PRODUCT'
-      }
 
-      Stock.gettable(options, (err, rows) => {
-        if (err) console.log('algun error', err)
-
-        commit('settablequantities', rows)
-      })
-    },
-    loadsales ({ state }) {
-      const options = {
-        table: 'SALES',
-        q: state.quantitytoload,
-        f: state.from,
-        id: 'SALE'
-      }
-
-      Stock.gettable(options, (err, rows) => {
-        if (err) console.log('algun error', err)
-
-        state.sales = rows
-      })
-    },
-    loadproductshassales ({ state }, payload) {
-      const sql = `
-				SELECT 
-					PS.AMOUNT,
-					P.PRODUCT,
-					P.NAME,
-					P.PRICE,
-					P.PRICESALE
-				FROM PRODUCTS_HAS_SALES AS PS
-				JOIN PRODUCTS AS P ON 
-					PS.PRODUCTS_PRODUCT = P.PRODUCT 
-					WHERE SALES_SALE = ${payload.sale}
-				ORDER BY SALES_SALE 
-			`
-
-      Stock.custom(sql, (err, products) => {
-        if (err) console.log('algun error', err)
-        // console.log(products);
-        state.pcartupdate = products
-        state.pcartnoupdate = products
-        this.commit('settotal')
-      })
-    },
-    sendproduct (context, { product, cb }) {
-      Stock.insertproduct(product, err => {
-        if (err) cb(err)
-
-        cb()
-      })
-    },
-    sendsale ({ state }, { data, cb }) {
-      data.amount = state.amount
-      data.total = state.total
-      data.products = state.productshassale
-      Stock.insertsale(data, err => {
-        if (err) cb(err)
-        const update = state.productscarttemp.map(p => findproduct(state.products, p))
-        console.log(update)
-
-        Stock.updateproducts(update, err => {
-          console.log(err)
-          if (err) cb(err)
-
-          cb()
-        })
-      })
-    },
-    updateproduct (context, { product, cb }) {
-      Stock.updateproduct(product, err => {
-        if (err) cb(err)
-
-        cb()
-      })
-    },
-    updatesale ({ state }, { data, cb }) {
-      data.amount = state.amount
-      data.total = state.total
-      data.products = state.productshassale
-      Stock.updatesale(data, err => {
-        if (err) cb(err)
-
-        cb()
-      })
-    },
-    removeproduct (context, payload) {
-      Stock.removeproduct(payload.product, err => {
-        if (err) throw err
-      })
-    },
-    removesale (context, payload) {
-      Stock.removesale(payload.product, err => {
-        if (err) throw err
-      })
-    }
   }
-
 })

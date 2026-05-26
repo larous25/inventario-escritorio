@@ -1,14 +1,13 @@
-/* globals Vue */
+import { createApp } from 'vue'
 
-global.Vue = require('vue/dist/vue')
+import router from './router'
+import store from './store'
 
-const VueRouter = require('vue-router/dist/vue-router')
-const router = require('./router')
-const store = require('./store')
+const app = createApp({
+  template: '<router-view />'
+})
 
-Vue.use(VueRouter)
+app.use(store)
+app.use(router)
 
-new Vue({
-  router,
-  store
-}).$mount('#app')
+app.mount('#app')

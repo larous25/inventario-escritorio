@@ -1,42 +1,31 @@
-/* globals Vue */
-const productstablecomponent = require('./productstable')
-const paginationcomponent = require('./pagination')
-const shopcartproductcomponent = require('./shopcartproduct')
-
-const { dialog } = require('electron').remote
-
-const { mapState } = require('vuex')
-
-const template = `
+<template>
 <div>
     <div>
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"> 
-                    <router-link to="/sales" >ventas</router-link>
+                    <router-link to="/sales">ventas</router-link>
                 </li>
                 <li class="breadcrumb-item active">Editar - Crear</li>
             </ol>
         </nav>
 
-
         <h2 v-if="$route.path === '/newsale'">
             Nueva Venta
         </h2>
-        <h2 v-if="$route.path === '/editsale'">
+        <h2 v-else-if="$route.path === '/editsale'">
             Actualiza Venta
         </h2>
 
     </div>
-	<div v-if="quantity <= 0" class="container">
-		<p>
-			Es necesario crear al menos un <strong> producto </strong> para poder crear una venta, da click en el botón para ir a crear uno.
-		</p>
-		
-    	<router-link to="/newproduct" tag="button" class="btn btn-secondary">  +  </router-link>
-	</div>
-    <div v-else="quantity > 0" class="container">
+    <div v-if="quantity <= 0" class="container">
+        <p>
+            Es necesario crear al menos un <strong> producto </strong> para poder crear una venta, da click en el botón para ir a crear uno.
+        </p>
+        <router-link to="/newproduct" class="btn btn-secondary">  +  </router-link>
+    </div>
+    <div v-else class="container">
 
         <div class="row">
             <div class="col-md-6 col-sm-12">
@@ -45,63 +34,64 @@ const template = `
                         Agrega productos!!!
                     </div>
 
-                    <ul v-else="productshassale.length > 0" class="list-group">
-                        <li v-for="(i, index) in productshassale" class="list-group-item">
-                            <shopcartproductcomponent :product="i" :key="index" />
+                    <ul v-else class="list-group">
+                        <li v-for="(i, index) in productshassale" :key="index" class="list-group-item">
+                            <shopcartproductcomponent :product="i" />
                         </li>
                     </ul>
 
                     <div>
                         Total: 
                         <strong> {{ total }} </strong>
-                    
                         Cantidad de Productos: 
                         <strong> {{ amount }} </strong>
                     </div>
                 </div>
 
                 <div class="col-sm-12">
-                
                     <div class="form-group">
                         <label for="comments">Comentarios</label>
-                        <textarea id="comments" class="form-control"  placeholder="comentarios" v-model="shopcart.comments"/>
+                        <textarea id="comments" class="form-control" placeholder="comentarios" v-model="shopcart.comments" />
                     </div>
 
-                    <button @click="send" class="btn btn-segundary">
-                        Guardar:
+                    <button @click="send" class="btn btn-secondary">
+                        Guardar
                     </button>
-
                 </div>
             </div>
 
             <div class="col-md-6 col-sm-12">
-                
-                <productstablecomponent  :from="from" :quantitytoload="quantitytoload"/>
-                <paginationcomponent :quantity="quantity" :quantitytoload="quantitytoload" :page="page" @setfrom="setfrom"/>
-                
+                <productstablecomponent :from="from" :quantitytoload="quantitytoload" />
+                <paginationcomponent :quantity="quantity" :quantitytoload="quantitytoload" :page="page" @setfrom="setfrom" />
             </div>
-
         </div>
     </div>
-    
+
     <div class="container justify-content-end">
         <div class="float-right">
-        	<router-link tag="button" class="btn btn-dark btn-sm" :to="{  name: 'sales'  }">
+            <router-link class="btn btn-dark btn-sm" :to="{ name: 'sales' }">
                 Atras
-			</router-link>
+            </router-link>
         </div>
     </div>
 </div>
+</template>
 
-`
+<script>
+import productstablecomponent from './productstable.vue'
+import paginationcomponent from './pagination.vue'
+import shopcartproductcomponent from './shopcartproduct.vue'
+import { mapState } from 'vuex'
 
-module.exports = Vue.component('formSales-component', {
+const { dialog } = require('electron').remote
+
+export default {
+  name: 'FormSalesComponent',
   components: {
     productstablecomponent,
     paginationcomponent,
     shopcartproductcomponent
   },
-  template,
   props: {
     shopcart: {
       type: Object,
@@ -113,7 +103,9 @@ module.exports = Vue.component('formSales-component', {
   created () {
     this.$store.commit('restartcart')
 
-    if (this.shopcart.sale) { this.$store.dispatch('loadproductshassales', this.shopcart) }
+    if (this.shopcart.sale) {
+      this.$store.dispatch('loadproductshassales', this.shopcart)
+    }
 
     this.$store.dispatch('getquantity', 'PRODUCTS')
   },
@@ -124,28 +116,27 @@ module.exports = Vue.component('formSales-component', {
           type: 'info',
           buttons: ['Aceptar'],
           title: 'Para guardar seleccione al menos un producto.',
-          message: 'Por favor seleccione algún producto ante de guardar.'
+          message: 'Por favor seleccione algún producto antes de guardar.'
         })
-
         return
       }
 
-      let action = ''
-      const data = {}
-      if (this.$route.path === '/newsale') {
-        action = 'sendsale'
-        data.comments = this.shopcart.comments
-      } else {
-        action = 'updatesale'
+      const data = {
+        comments: this.shopcart.comments
+      }
+
+      const action = this.$route.path === '/newsale'
+        ? 'sendsale'
+        : 'updatesale'
+
+      if (action === 'updatesale') {
         data.sale = this.shopcart.sale
-        data.comments = this.shopcart.comments
       }
 
       this.$store.dispatch(action, {
         data,
         cb: (err) => {
-          if (err) throw (err)
-
+          if (err) throw err
           this.$router.push('/sales')
         }
       })
@@ -163,4 +154,6 @@ module.exports = Vue.component('formSales-component', {
     'from',
     'quantitytoload'
   ])
-})
+}
+</script>
+

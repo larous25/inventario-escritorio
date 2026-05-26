@@ -1,32 +1,31 @@
-/* globals Vue */
-
-const template = `
+<template>
 <tr>
     <td scope="row">
-        <button class="btn btn-segundary" @click="add">
-            Agregar 
+        <button class="btn btn-secondary" @click="add">
+            Agregar
         </button>
     </td>
-    <td> 
+    <td>
         <strong>
-            {{ product.amount }} 
+            {{ product.amount }}
         </strong>
     </td>
-    <td> 
-    	{{ product.name }}
+    <td>
+        {{ product.name }}
     </td>
-	<td>
-		{{ product.pricesale }}
-	</td>
+    <td>
+        {{ product.pricesale }}
+    </td>
 </tr>
-`
+</template>
 
-module.exports = Vue.component('productsale-component', {
-  template,
+<script>
+export default {
+  name: 'ProductSaleComponent',
   props: {
     product: {
       type: Object,
-      default: {
+      default: () => ({
         product: 0,
         precio: 0,
         priceSale: 0,
@@ -34,7 +33,7 @@ module.exports = Vue.component('productsale-component', {
         tipo: '',
         amount: 0,
         sold: 0
-      }
+      })
     }
   },
   methods: {
@@ -42,4 +41,6 @@ module.exports = Vue.component('productsale-component', {
       this.$store.commit('addproduct', this.product)
     }
   }
-})
+}
+</script>
+

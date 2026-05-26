@@ -1,34 +1,31 @@
-/* globals Vue */
-
-const { dialog } = require('electron').remote
-
-const template = `
+<template>
 <tr>
     <td> {{ product.product }} </td>
     <td> {{ product.name }} </td>
     <td> {{ product.amount }} </td>
     <td> {{ product.price }} </td>
-	<td>
-		<router-link tag="button" class="btn btn-segundary" :to="{ name: 'editproducts', params: { product } }">
-			Actualizar 
-		</router-link>
-	</td>
-	<td>
-		<button class="btn btn-danger" @click="remove">
-			Eliminar 
-		</button>
-	</td>
- 
-
+    <td>
+      <router-link class="btn btn-secondary" :to="{ name: 'editproducts', params: { product } }">
+        Actualizar
+      </router-link>
+    </td>
+    <td>
+      <button class="btn btn-danger" @click="remove">
+        Eliminar
+      </button>
+    </td>
 </tr>
-`
+</template>
 
-module.exports = Vue.component('products-component', {
-  template,
+<script>
+const { dialog } = require('electron').remote
+
+export default {
+  name: 'ProductListComponent',
   props: {
     product: {
       type: Object,
-      default: {
+      default: () => ({
         product: 0,
         precio: 0,
         priceSale: 0,
@@ -36,7 +33,7 @@ module.exports = Vue.component('products-component', {
         tipo: '',
         amount: 0,
         sold: 0
-      }
+      })
     }
   },
   methods: {
@@ -59,4 +56,6 @@ module.exports = Vue.component('products-component', {
       this.$router.push('/editproduct')
     }
   }
-})
+}
+</script>
+

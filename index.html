@@ -4,18 +4,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Invetario</title>
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css"></link>
+
+    <title>Inventario</title>
+
+    <link rel="stylesheet"
+        href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
 </head>
+
 <body>
-<div id="app" class="container">
-        <router-view>
-        </router-view>
-</div>
-    
-    <script> 
-        require('./src/app');
-    </script>
+
+    <div id="app"
+        class="container">
+        <router-view></router-view>
+    </div>
+
+    <script type="module"
+        src="./src/app.js"></script>
+
 </body>
 
 </html>

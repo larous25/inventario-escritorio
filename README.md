@@ -1,17 +1,17 @@
 Inventario - escritorio
 ======================
 
-#Estado – en desarrollo
+# Estado – en desarrollo
 
 para comenzar
 
 ``npm start``
 
-#####por si algo 
+##### por si algo 
 eliminar bootstrap, instalar y luego volver a instalar bootstrap, así están las cosas  =S 
 
 
-###Que es 
+### Que es 
 
 Se trata de crear un software para manejo de inventario para pequeñas tiendas las cuales no cuentan con suficientes recursos y por ende tienen hardware viejo o de bajo costo y mucho menos se pueden costear un software.
 

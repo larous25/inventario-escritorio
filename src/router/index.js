@@ -1,22 +1,61 @@
-const VueRouter = require('vue-router/dist/vue-router')
-const homeComponent = require('../components/home')
-const balanceComponent = require('../components/balance')
-const formProductComponent = require('../components/formproduct')
-const formSalesComponent = require('../components/formsales')
+import { createRouter, createWebHashHistory } from 'vue-router'
+
+import homeComponent from '../components/home'
+import balanceComponent from '../components/balance'
+import formProductComponent from '../components/formproduct'
+import formSalesComponent from '../components/formsales'
 
 const routes = [
-  { path: '/editsale', name: 'editsale', component: formSalesComponent, props: true },
-  { path: '/newsale', component: formSalesComponent },
-  { path: '/editproduct', name: 'editproducts', component: formProductComponent, props: true },
-  { path: '/newproduct', component: formProductComponent },
-  { path: '/products', name: 'products', component: homeComponent },
-  { path: '/sales', name: 'sales', component: homeComponent },
-  { path: '/balance', component: balanceComponent },
-  { path: '/', redirect: '/products' }
+  {
+    path: '/editsale',
+    name: 'editsale',
+    component: formSalesComponent,
+    props: true
+  },
+
+  {
+    path: '/newsale',
+    component: formSalesComponent
+  },
+
+  {
+    path: '/editproduct',
+    name: 'editproducts',
+    component: formProductComponent,
+    props: true
+  },
+
+  {
+    path: '/newproduct',
+    component: formProductComponent
+  },
+
+  {
+    path: '/products',
+    name: 'products',
+    component: homeComponent
+  },
+
+  {
+    path: '/sales',
+    name: 'sales',
+    component: homeComponent
+  },
+
+  {
+    path: '/balance',
+    component: balanceComponent
+  },
+
+  {
+    path: '/',
+    redirect: '/products'
+  }
 ]
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   routes
 })
 
-module.exports = router
+export default router

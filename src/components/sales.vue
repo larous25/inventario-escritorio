@@ -1,36 +1,35 @@
-/* globals Vue */
-
-const { dialog } = require('electron').remote
-
-const template = `
+<template>
 <tr>
     <td> {{ sale.sale }} </td>
     <td> {{ sale.total }} </td>
     <td> {{ sale.createat }} </td>
-	<td> 
-		<router-link tag="button" class="btn btn-segundary" :to="{ name: 'editsale', params: { shopcart: sale } }">
-			Actualizar 
-		</router-link>
-	</td>
-	<td> 
-		<button  class="btn btn-danger" @click="remove">
-			Eliminar 
-		</button>
-	</td>
+    <td>
+      <router-link class="btn btn-secondary" :to="{ name: 'editsale', params: { shopcart: sale } }">
+        Actualizar
+      </router-link>
+    </td>
+    <td>
+      <button class="btn btn-danger" @click="remove">
+        Eliminar
+      </button>
+    </td>
 </tr>
-`
+</template>
 
-module.exports = Vue.component('sales-component', {
-  template,
+<script>
+const { dialog } = require('electron').remote
+
+export default {
+  name: 'SalesComponent',
   props: {
     sale: {
       type: Object,
-      default: {
+      default: () => ({
         sale: 0,
         total: 0,
         comments: '',
         createat: ''
-      }
+      })
     }
   },
   methods: {
@@ -50,4 +49,5 @@ module.exports = Vue.component('sales-component', {
       })
     }
   }
-})
+}
+</script>

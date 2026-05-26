@@ -1,6 +1,4 @@
-/* globals Vue */
-
-const template = `
+<template>
     <div class="row">
 
         <div class="col-md-6">
@@ -11,7 +9,7 @@ const template = `
                 {{ product.amount }}
             </div>
             <div>
-                <small> 
+                <small>
                     Nombre:
                 </small>
                     {{ product.name }}
@@ -34,15 +32,17 @@ const template = `
             </button>
         </div>
     </div>
+</template>
 
-`
-
-module.exports = Vue.component('shopproduct-component', {
-  template,
+<script>
+export default {
+  name: 'ShopcartProductComponent',
   props: {
-    product: Object
+    product: {
+      type: Object,
+      default: () => ({})
+    }
   },
-  data: () => ({}),
   methods: {
     add () {
       this.$store.commit('addproduct', this.product)
@@ -51,4 +51,5 @@ module.exports = Vue.component('shopproduct-component', {
       this.$store.commit('removeproduct', this.product)
     }
   }
-})
+}
+</script>

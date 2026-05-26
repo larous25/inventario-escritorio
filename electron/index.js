@@ -2,17 +2,18 @@ const path = require('path')
 
 const {
   app,
+  dialog,
   BrowserWindow,
   ipcMain
 } = require('electron')
 
-const Stock = require('./models/stocktaking')
+const Stock = require('../models/stocktaking')
 
 Stock.createtables()
 
 let win = null
 
-function createWindow () {
+function createWindow() {
   win = new BrowserWindow({
     width: 900,
     height: 700,
@@ -25,11 +26,14 @@ function createWindow () {
     }
   })
 
-  if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
+    win.loadURL('http://localhost:5173')
     win.webContents.openDevTools()
+  } else {
+    win.loadFile(path.join(__dirname, '../dist/index.html'))
   }
 
-  win.loadFile('index.html')
+  // win.loadFile('index.html')
 
   win.on('closed', () => {
     win = null
@@ -181,6 +185,10 @@ ipcMain.handle('db:custom', async (event, sql) => {
       resolve(rows)
     })
   })
+})
+
+ipcMain.handle('dialog:showMessageBox', async (event, options) => {
+  return await dialog.showMessageBox(options)
 })
 
 app.whenReady().then(() => {

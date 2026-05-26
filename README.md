@@ -17,12 +17,13 @@ Se trata de crear un software para manejo de inventario para pequeñas tiendas l
 
 Por eso es necesario que se  pueda utilizar en cualquier sistema operativo (libre o privativo) y que este disponible para una persona con casi nulo conocimiento informático.
 
-#por qué
+# Por qué
 
-porque muchas tiendas aun no tienen un sofware que facilite el manejo de inventario y no cuentan con el dinero necesario para costearse uno.
+Porque muchas tiendas aun no tienen un sofware que facilite el manejo de inventario y no cuentan con
+el dinero necesario para costearse uno. 
 Con un software que muestre de forma fácil y clara que productos son los de mayor venta y cuales están a punto de acabarse.
 
-Por que tengo mucho tiempo libre.
+Porque tengo mucho tiempo libre.
 
 características:
 

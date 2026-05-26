@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <header class="navbar navbar-dark bg-light">
+    <header class="navbar navbar-light bg-light">
       <nav class="nav nav-pills nav-fill">
         <ul class="nav justify-content-center">
           <li
@@ -13,9 +13,7 @@
               :to="o.link"
               active-class="active"
             >
-              <span>
-                {{ o.text }}
-              </span>
+              <span>{{ o.text }}</span>
             </router-link>
           </li>
         </ul>
@@ -26,14 +24,14 @@
 
     <div v-if="quantity <= 0" class="container">
       <p>
-        Es necesario crear un
+        Es necesario crear
 
         <strong v-if="$route.path === '/sales'">
-          ventas
+          una venta
         </strong>
 
         <strong v-else>
-          producto
+          un producto
         </strong>
 
         para comenzar:
@@ -80,49 +78,33 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-
+<script setup>
+import { computed, watch, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import productstablecomponent from './productstable.vue'
 import salestablecomponent from './salestable.vue'
 import paginationcomponent from './pagination.vue'
 
-export default {
-  name: 'HomeComponent',
-  components: {
-    productstablecomponent,
-    salestablecomponent,
-    paginationcomponent
-  },
-  computed: {
-    ...mapState([
-      'page',
-      'quantity',
-      'from',
-      'quantitytoload',
-      'options'
-    ])
-  },
-  mounted () {
-    this.getquantity()
-  },
-  methods: {
-    setfrom (f, p) {
-      this.$store.commit('setfrom', { f, p })
-    },
-    getquantity () {
-      const type =
-        this.$route.path === '/products'
-          ? 'PRODUCTS'
-          : 'SALES'
+const store = useStore()
+const route = useRoute()
 
-      this.$store.dispatch('getquantity', type)
-    }
-  },
-  watch: {
-    $route () {
-      this.getquantity()
-    }
-  }
+// Estados desde Vuex
+const page = computed(() => store.state.page)
+const quantity = computed(() => store.state.quantity)
+const from = computed(() => store.state.from)
+const quantitytoload = computed(() => store.state.quantitytoload)
+const options = computed(() => store.state.options)
+
+function setfrom(f, p) {
+  store.commit('setfrom', { f, p })
 }
+
+function getquantity() {
+  const type = route.path === '/products' ? 'PRODUCTS' : 'SALES'
+  store.dispatch('getquantity', type)
+}
+
+onMounted(() => getquantity())
+watch(() => route.path, () => getquantity())
 </script>

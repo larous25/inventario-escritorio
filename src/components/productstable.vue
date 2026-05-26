@@ -1,6 +1,6 @@
 <template>
   <table class="table table-hover table-sm">
-    <thead class="thead-dark">
+    <thead class="table-dark">
       <tr v-if="$route.path === '/products'">
         <th scope="col"># Id</th>
         <th scope="col">NOMBRE</th>
@@ -37,37 +37,25 @@
   </table>
 </template>
 
-<script>
+<script setup>
+import { computed, watch, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import productlistcomponent from './productlist.vue'
 import productsalecomponent from './productsale.vue'
-import { mapState, mapActions } from 'vuex'
 
-export default {
-  name: 'ProductStableComponent',
-  components: {
-    productlistcomponent,
-    productsalecomponent
-  },
-  props: {
-    from: {
-      type: Number,
-      default: 0
-    },
-    quantitytoload: {
-      type: Number,
-      default: 10
-    }
-  },
-  mounted () {
-    this.$store.dispatch('loadproducts')
-  },
-  methods: mapActions(['loadproducts']),
-  computed: mapState([
-    'products'
-  ]),
-  watch: {
-    from: 'loadproducts'
-  }
-}
+const props = defineProps({
+  from: { type: Number, default: 0 },
+  quantitytoload: { type: Number, default: 10 }
+})
+
+const store = useStore()
+const route = useRoute()
+const products = computed(() => store.state.products)
+
+const loadproducts = () => store.dispatch('loadproducts')
+
+onMounted(() => loadproducts())
+watch(() => props.from, () => loadproducts())
 </script>
 

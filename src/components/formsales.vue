@@ -1,159 +1,148 @@
 <template>
-<div>
+  <div>
     <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <router-link to="/sales">ventas</router-link>
+          </li>
+          <li class="breadcrumb-item active">Editar - Crear</li>
+        </ol>
+      </nav>
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"> 
-                    <router-link to="/sales">ventas</router-link>
-                </li>
-                <li class="breadcrumb-item active">Editar - Crear</li>
-            </ol>
-        </nav>
-
-        <h2 v-if="$route.path === '/newsale'">
-            Nueva Venta
-        </h2>
-        <h2 v-else-if="$route.path === '/editsale'">
-            Actualiza Venta
-        </h2>
-
+      <h2 v-if="$route.path === '/newsale'">
+        Nueva Venta
+      </h2>
+      <h2 v-else-if="$route.path === '/editsale'">
+        Actualiza Venta
+      </h2>
     </div>
+
     <div v-if="quantity <= 0" class="container">
-        <p>
-            Es necesario crear al menos un <strong> producto </strong> para poder crear una venta, da click en el botón para ir a crear uno.
-        </p>
-        <router-link to="/newproduct" class="btn btn-secondary">  +  </router-link>
+      <p>
+        Es necesario crear al menos un <strong>producto</strong> para poder crear una venta. Da click en el botón para ir a crear uno.
+      </p>
+      <router-link to="/newproduct" class="btn btn-secondary"> + </router-link>
     </div>
+
     <div v-else class="container">
-
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <div class="col-sm-12">
-                    <div v-if="productshassale.length <= 0">
-                        Agrega productos!!!
-                    </div>
-
-                    <ul v-else class="list-group">
-                        <li v-for="(i, index) in productshassale" :key="index" class="list-group-item">
-                            <shopcartproductcomponent :product="i" />
-                        </li>
-                    </ul>
-
-                    <div>
-                        Total: 
-                        <strong> {{ total }} </strong>
-                        Cantidad de Productos: 
-                        <strong> {{ amount }} </strong>
-                    </div>
-                </div>
-
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label for="comments">Comentarios</label>
-                        <textarea id="comments" class="form-control" placeholder="comentarios" v-model="shopcart.comments" />
-                    </div>
-
-                    <button @click="send" class="btn btn-secondary">
-                        Guardar
-                    </button>
-                </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="col-sm-12">
+            <div v-if="productshassale.length <= 0">
+              Agrega productos!!!
             </div>
 
-            <div class="col-md-6 col-sm-12">
-                <productstablecomponent :from="from" :quantitytoload="quantitytoload" />
-                <paginationcomponent :quantity="quantity" :quantitytoload="quantitytoload" :page="page" @setfrom="setfrom" />
+            <ul v-else class="list-group">
+              <li v-for="(product, index) in productshassale" :key="index" class="list-group-item">
+                <shopcartproductcomponent :product="product" />
+              </li>
+            </ul>
+
+            <div>
+              Total:
+              <strong>{{ total }}</strong>
+              Cantidad de Productos:
+              <strong>{{ amount }}</strong>
             </div>
+          </div>
+
+          <div class="col-sm-12">
+            <div class="mb-3">
+              <label for="comments" class="form-label">Comentarios</label>
+              <textarea
+                id="comments"
+                class="form-control"
+                placeholder="comentarios"
+                v-model="localComments"
+              ></textarea>
+            </div>
+
+            <button @click="send" class="btn btn-secondary">
+              Guardar
+            </button>
+          </div>
         </div>
+
+        <div class="col-md-6 col-sm-12">
+          <productstablecomponent :from="from" :quantitytoload="quantitytoload" />
+          <paginationcomponent :quantity="quantity" :quantitytoload="quantitytoload" :page="page" @setfrom="setfrom" />
+        </div>
+      </div>
     </div>
 
     <div class="container justify-content-end">
-        <div class="float-right">
-            <router-link class="btn btn-dark btn-sm" :to="{ name: 'sales' }">
-                Atras
-            </router-link>
-        </div>
+      <div class="float-end">
+        <router-link class="btn btn-dark btn-sm" :to="{ name: 'sales' }">
+          Atrás
+        </router-link>
+      </div>
     </div>
-</div>
+  </div>
 </template>
 
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 import productstablecomponent from './productstable.vue'
 import paginationcomponent from './pagination.vue'
 import shopcartproductcomponent from './shopcartproduct.vue'
-import { mapState } from 'vuex'
 
-const { dialog } = require('electron').remote
+const props = defineProps({
+  shopcart: { type: Object, default: () => ({ comments: '' }) }
+})
 
-export default {
-  name: 'FormSalesComponent',
-  components: {
-    productstablecomponent,
-    paginationcomponent,
-    shopcartproductcomponent
-  },
-  props: {
-    shopcart: {
-      type: Object,
-      default: () => ({
-        comments: ''
-      })
-    }
-  },
-  created () {
-    this.$store.commit('restartcart')
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
 
-    if (this.shopcart.sale) {
-      this.$store.dispatch('loadproductshassales', this.shopcart)
-    }
+// Copia local de comentarios
+const localComments = ref(props.shopcart.comments || '')
 
-    this.$store.dispatch('getquantity', 'PRODUCTS')
-  },
-  methods: {
-    send () {
-      if (this.amount <= 0) {
-        dialog.showMessageBox({
-          type: 'info',
-          buttons: ['Aceptar'],
-          title: 'Para guardar seleccione al menos un producto.',
-          message: 'Por favor seleccione algún producto antes de guardar.'
-        })
-        return
-      }
+// Estados del store
+const productshassale = computed(() => store.state.productshassale)
+const amount = computed(() => store.state.amount)
+const total = computed(() => store.state.total)
+const page = computed(() => store.state.page)
+const quantity = computed(() => store.state.quantity)
+const from = computed(() => store.state.from)
+const quantitytoload = computed(() => store.state.quantitytoload)
 
-      const data = {
-        comments: this.shopcart.comments
-      }
-
-      const action = this.$route.path === '/newsale'
-        ? 'sendsale'
-        : 'updatesale'
-
-      if (action === 'updatesale') {
-        data.sale = this.shopcart.sale
-      }
-
-      this.$store.dispatch(action, {
-        data,
-        cb: (err) => {
-          if (err) throw err
-          this.$router.push('/sales')
-        }
-      })
-    },
-    setfrom (f, p) {
-      this.$store.commit('setfrom', { f, p })
-    }
-  },
-  computed: mapState([
-    'productshassale',
-    'amount',
-    'total',
-    'page',
-    'quantity',
-    'from',
-    'quantitytoload'
-  ])
+function setfrom(f, p) {
+  store.commit('setfrom', { f, p })
 }
-</script>
 
+async function send() {
+  if (amount.value <= 0) {
+    await window.electronAPI.showMessageBox({
+      type: 'info',
+      buttons: ['Aceptar'],
+      title: 'Para guardar seleccione al menos un producto.',
+      message: 'Por favor seleccione algún producto antes de guardar.'
+    })
+    return
+  }
+
+  const data = { comments: localComments.value }
+  const action = route.path === '/newsale' ? 'sendsale' : 'updatesale'
+  if (action === 'updatesale') data.sale = props.shopcart.sale
+
+  store.dispatch(action, {
+    data,
+    cb: (err) => {
+      if (err) throw err
+      router.push('/sales')
+    }
+  })
+}
+
+onMounted(() => {
+  store.commit('restartcart')
+  if (props.shopcart.sale) {
+    store.dispatch('loadproductshassales', props.shopcart)
+  }
+  store.dispatch('getquantity', 'PRODUCTS')
+})
+</script>

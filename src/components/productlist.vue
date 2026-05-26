@@ -17,45 +17,46 @@
 </tr>
 </template>
 
-<script>
-const { dialog } = require('electron').remote
+<script setup>
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
-export default {
-  name: 'ProductListComponent',
-  props: {
-    product: {
-      type: Object,
-      default: () => ({
-        product: 0,
-        precio: 0,
-        priceSale: 0,
-        name: '',
-        tipo: '',
-        amount: 0,
-        sold: 0
-      })
-    }
-  },
-  methods: {
-    remove () {
-      dialog.showMessageBox({
-        type: 'question',
-        buttons: ['Cancelar', 'Aceptar'],
-        title: 'Porfavor confirmar',
-        message: '¿Esta seguro que desea eliminar?'
-      }, response => {
-        if (response === 1) {
-          this.$store.dispatch('removeproduct', {
-            product: this.product.product
-          })
-          this.$emit('load')
-        }
-      })
-    },
-    update () {
-      this.$router.push('/editproduct')
-    }
+const props = defineProps({
+  product: {
+    type: Object,
+    default: () => ({
+      product: 0,
+      precio: 0,
+      priceSale: 0,
+      name: '',
+      tipo: '',
+      amount: 0,
+      sold: 0
+    })
+  }
+})
+
+const emit = defineEmits(['load'])
+const store = useStore()
+const router = useRouter()
+
+async function remove() {
+  const response = await window.electronAPI.showMessageBox({
+    type: 'question',
+    buttons: ['Cancelar', 'Aceptar'],
+    title: 'Por favor confirmar',
+    message: '¿Está seguro que desea eliminar este producto?'
+  })
+
+  if (response.response === 1) {
+    await store.dispatch('removeproduct', {
+      product: props.product.product
+    })
+    emit('load')
   }
 }
-</script>
 
+function update() {
+  router.push('/editproduct')
+}
+</script>

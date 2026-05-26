@@ -1,60 +1,47 @@
 <template>
-<nav v-if="separator > 0" aria-label="Page navigation">
+  <nav v-if="separator > 0" aria-label="Page navigation">
     <ul class="pagination justify-content-center">
-        <li v-for="i in separator" :class="[{ 'disabled': page === i }, 'page-item']" @click="goTo(i)" :key="i">
-            <a class="page-link" href="#">
-                {{ i }}
-            </a>
-        </li>
+      <li
+        v-for="i in separator"
+        :key="i"
+        :class="[{ 'disabled': page === i }, 'page-item']"
+      >
+        <a
+          class="page-link"
+          href="javascript:void(0)"
+          @click.prevent="goTo(i)"
+        >
+          {{ i }}
+        </a>
+      </li>
     </ul>
-</nav>
+  </nav>
 </template>
 
-<script>
-const ten = 10
-const zero = 0
+<script setup>
+import { ref, watch } from 'vue'
 
-export default {
-  name: 'PaginationComponent',
-  props: {
-    quantity: {
-      type: Number,
-      default: zero
-    },
-    quantitytoload: {
-      type: Number,
-      default: ten
-    },
-    page: {
-      type: Number,
-      default: 1
-    }
-  },
-  data () {
-    return {
-      separator: zero
-    }
-  },
-  watch: {
-    quantity: {
-      immediate: true,
-      handler () {
-        this.updateSeparator()
-      }
-    }
-  },
-  methods: {
-    updateSeparator () {
-      this.separator = this.quantity > zero
-        ? Math.ceil(this.quantity / ten)
-        : zero
-    },
-    goTo (i) {
-      if (this.page !== i) {
-        this.$emit('setfrom', i * ten - ten, i)
-      }
-    }
+const props = defineProps({
+  quantity: { type: Number, default: 0 },
+  quantitytoload: { type: Number, default: 10 },
+  page: { type: Number, default: 1 }
+})
+
+const emit = defineEmits(['setfrom'])
+const separator = ref(0)
+
+function updateSeparator() {
+  separator.value = props.quantity > 0
+    ? Math.ceil(props.quantity / props.quantitytoload)
+    : 0
+}
+
+function goTo(i) {
+  if (props.page !== i) {
+    const from = (i - 1) * props.quantitytoload
+    emit('setfrom', from, i)
   }
 }
-</script>
 
+watch(() => props.quantity, updateSeparator, { immediate: true })
+</script>

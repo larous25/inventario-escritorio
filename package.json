@@ -2,12 +2,12 @@
   "name": "inventario",
   "version": "1.0.0",
   "description": "una aplicacion de escritorio de inventario",
-  "main": "index.js",
+  "main": "electron/index.js",
   "scripts": {
+    "dev": "cross-env NODE_ENV=development vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "postinstall": "install-app-deps",
-    "start": "cross-env NODE_ENV=development electron . ",
-    "build-win": "electron-forge package --platform=win32 --arch=ia32",
-    "build-linux": "electron-forge package --platform=linux --arch=x64",
     "make": "electron-forge make"
   },
   "keywords": [
@@ -26,14 +26,13 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
     "cross-env": "^7.0.3",
     "electron-builder": "^26.8.1",
-    "eslint": "^10.4.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "electron-vite": "^5.0.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "vite": "^7.3.3",
+    "vite-plugin-electron": "^0.29.1"
   },
   "config": {
     "forge": {

@@ -1,8 +1,8 @@
 <template>
-<tr>
-    <td> {{ sale.sale }} </td>
-    <td> {{ sale.total }} </td>
-    <td> {{ sale.createat }} </td>
+  <tr>
+    <td>{{ sale.sale }}</td>
+    <td>{{ sale.total }}</td>
+    <td>{{ sale.createat }}</td>
     <td>
       <router-link class="btn btn-secondary" :to="{ name: 'editsale', params: { shopcart: sale } }">
         Actualizar
@@ -13,41 +13,40 @@
         Eliminar
       </button>
     </td>
-</tr>
+  </tr>
 </template>
 
-<script>
-const { dialog } = require('electron').remote
+<script setup>
+import { useStore } from 'vuex'
 
-export default {
-  name: 'SalesComponent',
-  props: {
-    sale: {
-      type: Object,
-      default: () => ({
-        sale: 0,
-        total: 0,
-        comments: '',
-        createat: ''
-      })
-    }
-  },
-  methods: {
-    remove () {
-      dialog.showMessageBox({
-        type: 'question',
-        buttons: ['Cancelar', 'Aceptar'],
-        title: 'Porfavor confirmar',
-        message: '¿Esta seguro que desea eliminar?'
-      }, response => {
-        if (response === 1) {
-          this.$store.dispatch('removesale', {
-            product: this.sale.sale
-          })
-          this.$emit('load')
-        }
-      })
-    }
+const props = defineProps({
+  sale: {
+    type: Object,
+    default: () => ({
+      sale: 0,
+      total: 0,
+      comments: '',
+      createat: ''
+    })
+  }
+})
+
+const emit = defineEmits(['load'])
+const store = useStore()
+
+async function remove() {
+  const response = await window.electronAPI.showMessageBox({
+    type: 'question',
+    buttons: ['Cancelar', 'Aceptar'],
+    title: 'Por favor confirmar',
+    message: '¿Está seguro que desea eliminar esta venta?'
+  })
+
+  if (response.response === 1) {
+    await store.dispatch('removesale', {
+      product: props.sale.sale
+    })
+    emit('load')
   }
 }
 </script>

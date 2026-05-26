@@ -23,7 +23,7 @@ const initstate = {
   products: [],
   sales: [],
 
-  isactive: true,
+  isActive: true,
 
   productscarttemp: [],
   pcartupdate: [],

@@ -113,33 +113,34 @@ import { ref, watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 
-const props = defineProps({
-  product: {
-    type: Object,
-    default: () => ({
-      name: '', type: '', amount: 0, price: 0, pricesale: 0, comments: ''
-    })
-  }
-})
-
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 
 const isActive = computed(() => store.state.isActive)
-const localProduct = ref({ ...props.product })
+const productToEdit = computed(() => store.state.productToEdit)
 
-watch(() => props.product, (newVal) => {
-  localProduct.value = { ...newVal }
-}, { deep: true, immediate: true })
+const localProduct = ref({
+  name: '', type: '', amount: 0, price: 0, pricesale: 0, comments: ''
+})
+
+
+watch(productToEdit, (newVal) => {
+  console.log("Datos recibidos en formulario:", newVal);
+  if (newVal) {
+    localProduct.value = { ...newVal }
+  }
+}, { immediate: true })
 
 function checkifnumber(event, property) {
   let value = event.target.value.replace(/[^\d.]/g, '')
   const number = Number(value)
-  let newvalue = 0
-  if (isNaN(number)) newvalue = 0
-  else if (/price/.test(property)) newvalue = Math.ceil(number / 50) * 50
-  else newvalue = number
+  let newvalue = isNaN(number) ? 0 : number
+  
+  if (/price/.test(property)) {
+    newvalue = Math.ceil(newvalue / 50) * 50
+  }
+  
   localProduct.value[property] = newvalue
   event.target.value = newvalue
 }
@@ -149,9 +150,12 @@ async function send() {
     store.commit('desactive')
     return
   }
+  
   const action = route.path === '/newproduct' ? 'sendproduct' : 'updateproduct'
+  
   try {
     await store.dispatch(action, { product: localProduct.value })
+    store.commit('setProductToEdit', null) 
     router.push('/products')
   } catch (err) { console.error(err) }
 }

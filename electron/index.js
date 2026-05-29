@@ -33,8 +33,6 @@ if (process.env.NODE_ENV === 'development') {
     win.loadFile(path.join(__dirname, '../dist/index.html'))
   }
 
-  // win.loadFile('index.html')
-
   win.on('closed', () => {
     win = null
   })
@@ -171,6 +169,18 @@ ipcMain.handle('sales:remove', async (event, saleId) => {
     })
   })
 })
+
+
+ipcMain.handle('sales:get-products', async (event, saleId) => {
+  return await new Promise((resolve, reject) => {
+   
+    Stock.getproductsbysale(saleId, (err, rows) => {
+      if (err) reject(err);
+      resolve(rows);
+    });
+  });
+});
+
 
 // CUSTOM SQL
 

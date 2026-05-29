@@ -23,7 +23,6 @@
         v-for="(i, index) in products"
         :product="i"
         :key="index"
-        @load="loadproducts"
       />
     </tbody>
 

@@ -89,7 +89,7 @@ import paginationcomponent from './pagination.vue'
 const store = useStore()
 const route = useRoute()
 
-// Estados desde Vuex
+
 const page = computed(() => store.state.page)
 const quantity = computed(() => store.state.quantity)
 const from = computed(() => store.state.from)

@@ -1,53 +1,41 @@
 Inventario - escritorio
 ======================
 
-# Estado – en desarrollo
+Se trata de crear un software para el manejo de inventario en pequeñas tiendas que no cuentan con suficientes recursos. Por ende, tienen hardware viejo o de bajo costo y mucho menos pueden costear un software.
 
-para comenzar
+Por eso es necesario que se pueda utilizar en cualquier sistema operativo (libre o privativo) y que esté disponible para una persona con casi nulo conocimiento informático.
+
+## Estado – En desarrollo
+
+En el momento en que realicé la aplicación, tenía mucho tiempo y quería aventurarme con tecnologías que no conocía muy bien, aunque no eran imposibles de dominar. Por ello, me tomó mucho tiempo leer documentación para construir lo que más o menos quería. Sin embargo, por algunas cuestiones, mantener actualizado el código e ir trabajando incluso con pequeños cambios era muy complicado, y la aplicación quedó ahí, aunque espero que con *vibe coding* la cuestión fluya mejor.
+
+## Para comenzar:
 
 ``npm start``
 
-##### por si algo 
-eliminar bootstrap, instalar y luego volver a instalar bootstrap, así están las cosas  =S 
+### ¿Por qué?
 
+Porque muchas tiendas aún no tienen un software que facilite el manejo de inventario y no cuentan con el dinero necesario para costear uno. Un software que muestre de forma fácil y clara qué productos son los de mayor venta y cuáles están a punto de agotarse. Además, porque tengo mucho tiempo libre.
 
-### Que es 
+### Características:
 
-Se trata de crear un software para manejo de inventario para pequeñas tiendas las cuales no cuentan con suficientes recursos y por ende tienen hardware viejo o de bajo costo y mucho menos se pueden costear un software.
+- Multiplataforma
+- Sencillo
+- Libre
+- Gratis
+- Escalable (eso intento)
 
-Por eso es necesario que se  pueda utilizar en cualquier sistema operativo (libre o privativo) y que este disponible para una persona con casi nulo conocimiento informático.
+### Tecnologías
 
-# Por qué
+- Vue
+- Vue Router
+- Vuex
+- Electron
+- SQLite
 
-Porque muchas tiendas aun no tienen un sofware que facilite el manejo de inventario y no cuentan con
-el dinero necesario para costearse uno. 
-Con un software que muestre de forma fácil y clara que productos son los de mayor venta y cuales están a punto de acabarse.
+## Funcionalidades
 
-Porque tengo mucho tiempo libre.
+- CRUD de producto
+- CRUD de venta
 
-características:
-
-- multiplataforma
-- sencillo 
-- libre
-- gratis
-- escalable (eso intento)
-
-Tecnologías
-
-- vue
-- vue-router
-- vuex
-- electron
-- sqlite
-
-funcionalidad
-
-- crud produto
-- crud venta
-
-planes a futuro 
-
-pasar a vue-native para que pueda utilizar en celulares
-
-
+![Productos](./imgs/productos.png)

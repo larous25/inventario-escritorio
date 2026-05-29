@@ -22,7 +22,7 @@ const routes = [
     path: '/editproduct',
     name: 'editproducts',
     component: formProductComponent,
-    props: true
+    props: false 
   },
 
   {

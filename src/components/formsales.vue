@@ -90,16 +90,15 @@ import productstablecomponent from './productstable.vue'
 import paginationcomponent from './pagination.vue'
 import shopcartproductcomponent from './shopcartproduct.vue'
 
-const props = defineProps({
-  shopcart: { type: Object, default: () => ({ comments: '' }) }
-})
-
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 
-// Copia local de comentarios
-const localComments = ref(props.shopcart.comments || '')
+
+const saleToEdit = computed(() => store.state.saleToEdit)
+
+
+const localComments = ref('')
 
 // Estados del store
 const productshassale = computed(() => store.state.productshassale)
@@ -125,14 +124,25 @@ async function send() {
     return
   }
 
-  const data = { comments: localComments.value }
+  const data = { 
+    comments: localComments.value,
+    created_by: 1,
+  }
   const action = route.path === '/newsale' ? 'sendsale' : 'updatesale'
-  if (action === 'updatesale') data.sale = props.shopcart.sale
+  
 
+  if (action === 'updatesale' && saleToEdit.value) {
+    data.sale = saleToEdit.value.sale // nota arreglar
+    data.id = saleToEdit.id
+  }
+
+  const cleanData = JSON.parse(JSON.stringify(data))
+  
   store.dispatch(action, {
-    data,
-    cb: (err) => {
+    data: cleanData,
+    cb: (err) => { 
       if (err) throw err
+      store.commit('setSaleToEdit', null) 
       router.push('/sales')
     }
   })
@@ -140,8 +150,9 @@ async function send() {
 
 onMounted(() => {
   store.commit('restartcart')
-  if (props.shopcart.sale) {
-    store.dispatch('loadproductshassales', props.shopcart)
+  if (saleToEdit.value) {
+    localComments.value = saleToEdit.value.comments || ''
+    store.dispatch('loadproductshassales', saleToEdit.value)
   }
   store.dispatch('getquantity', 'PRODUCTS')
 })

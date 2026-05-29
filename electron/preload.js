@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
   // --- Productos ---
-  getProducts: () => ipcRenderer.invoke('products:get'),
+  getProducts: (options) => ipcRenderer.invoke('products:get', options), 
   getProductsCount: (table) => ipcRenderer.invoke('products:count', table),
   insertProduct: (product) => ipcRenderer.invoke('products:insert', product),
   updateProduct: (product) => ipcRenderer.invoke('products:update', product),
@@ -17,4 +17,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // --- Utilidades ---
   runCustomSQL: (sql) => ipcRenderer.invoke('db:custom', sql),
   showMessageBox: (options) => ipcRenderer.invoke('dialog:showMessageBox', options),
+
+  // ... tus otros métodos
+  getProductsBySale: (saleId) => ipcRenderer.invoke('sales:get-products', saleId),
+
 })

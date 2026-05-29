@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
+import { computed, watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import salescomponent from './sales.vue'
 
@@ -35,11 +35,22 @@ const props = defineProps({
 
 const store = useStore()
 const sales = computed(() => store.state.sales)
-// También page, quantity si se necesitan
 
-const loadsales = () => store.dispatch('loadsales')
 
-loadsales() // ejecutar al montar
+const loadsales = () => {
+  store.dispatch('loadsales', { 
+    f: props.from, 
+    q: props.quantitytoload 
+  })
+}
 
-watch(() => props.from, () => loadsales())
+// Ejecutar al montar
+onMounted(() => {
+  loadsales()
+})
+
+
+watch(() => [props.from, props.quantitytoload], () => {
+  loadsales()
+})
 </script>

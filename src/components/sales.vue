@@ -4,7 +4,7 @@
     <td>{{ sale.total }}</td>
     <td>{{ sale.createat }}</td>
     <td>
-      <router-link class="btn btn-secondary" :to="{ name: 'editsale', params: { shopcart: sale } }">
+      <router-link class="btn btn-secondary" to="/editsale" @click="editSale">
         Actualizar
       </router-link>
     </td>
@@ -20,15 +20,7 @@
 import { useStore } from 'vuex'
 
 const props = defineProps({
-  sale: {
-    type: Object,
-    default: () => ({
-      sale: 0,
-      total: 0,
-      comments: '',
-      createat: ''
-    })
-  }
+  sale: { type: Object, required: true }
 })
 
 const emit = defineEmits(['load'])
@@ -43,10 +35,15 @@ async function remove() {
   })
 
   if (response.response === 1) {
-    await store.dispatch('removesale', {
-      product: props.sale.sale
-    })
+    await store.dispatch('removesale', props.sale.sale)
     emit('load')
   }
+}
+
+function editSale(sale) {
+ 
+  store.commit('setSaleToEdit', props.sale) 
+ 
+  // router.push('/editsale')
 }
 </script>

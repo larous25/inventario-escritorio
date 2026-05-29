@@ -3,9 +3,9 @@
     <td> {{ product.product }} </td>
     <td> {{ product.name }} </td>
     <td> {{ product.amount }} </td>
-    <td> {{ product.price }} </td>
+    <td> {{ product.pricesale }} </td>
     <td>
-      <router-link class="btn btn-secondary" :to="{ name: 'editproducts', params: { product } }">
+      <router-link class="btn btn-secondary" to="/editproduct" @click="editProduct">
         Actualizar
       </router-link>
     </td>
@@ -36,7 +36,6 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['load'])
 const store = useStore()
 const router = useRouter()
 
@@ -52,8 +51,13 @@ async function remove() {
     await store.dispatch('removeproduct', {
       product: props.product.product
     })
-    emit('load')
   }
+}
+
+function editProduct() {
+  // Guardamos el producto en el store
+  store.commit('setProductToEdit', props.product)
+  // router.push('/editproduct')
 }
 
 function update() {

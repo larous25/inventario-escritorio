@@ -1,0 +1,139 @@
+/* =========================================================
+   GLOBAL APP STYLES
+   Electron + Vue 3 + Bootstrap 5
+========================================================= */
+
+html,
+body,
+#app {
+  min-height: 100%;
+  background: #f4f6f9;
+}
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+  overflow-x: hidden;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: #212529;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+  border: none;
+  border-radius: 18px;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn {
+  border-radius: 10px;
+  transition: 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.form-control,
+.form-select,
+textarea {
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15) !important;
+}
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.table {
+  margin-bottom: 0;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.table-hover tbody tr {
+  transition: 0.15s ease-in-out;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+.text-price {
+  color: #198754;
+  font-weight: 600;
+}
+
+/* =========================================================
+   SCROLLBAR (Electron)
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b8b8b8;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8f8f8f;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  body {
+    font-size: 0.92rem;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .btn {
+    font-size: 0.85rem;
+  }
+
+  .card {
+    border-radius: 14px;
+  }
+}

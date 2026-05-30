@@ -1,108 +1,170 @@
 <template>
-  <div class="container">
-    <nav aria-label="breadcrumb">
+  <div class="container py-3 py-md-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <router-link to="/products">products</router-link>
+          <router-link to="/products">
+            Productos
+          </router-link>
         </li>
-        <li class="breadcrumb-item active">Editar - Crear</li>
+
+        <li class="breadcrumb-item active">
+          {{ title }}
+        </li>
       </ol>
     </nav>
 
-    <h3 v-if="$route.path === '/newproduct'">Nuevo Producto</h3>
-    <h3 v-else-if="$route.path === '/editproduct'">Actualizar Producto</h3>
+    <!-- Card -->
+    <div class="card shadow-sm border-0 rounded-4">
 
-    <form @submit.prevent="send">
-      <div class="mb-3">
-        <label for="name" class="form-label">Nombre:</label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          class="form-control"
-          placeholder="Nombre"
-          v-model="localProduct.name"
-        />
-        <small :class="isActive ? 'd-none' : 'd-block'">
-          Es necesario un nombre
-        </small>
-      </div>
+      <div class="card-body p-3 p-md-4">
 
-      <div class="mb-3">
-        <label for="type" class="form-label">Tipo:</label>
-        <input
-          id="type"
-          name="type"
-          type="text"
-          class="form-control"
-          placeholder="tipo"
-          v-model="localProduct.type"
-        />
-      </div>
+        <!-- Title -->
+        <div class="mb-4">
+          <h3 class="fw-bold mb-1">
+            {{ title }}
+          </h3>
 
-      <div class="mb-3">
-        <label for="amount" class="form-label">Cantidad:</label>
-        <input
-          id="amount"
-          name="amount"
-          type="number"
-          min="0"
-          class="form-control"
-          placeholder="Cantidad"
-          v-model="localProduct.amount"
-          @input="checkifnumber($event, 'amount')"
-        />
-      </div>
+          <small class="text-muted">
+            Complete la información del producto
+          </small>
+        </div>
 
-      <div class="mb-3">
-        <label for="price" class="form-label">Precio:</label>
-        <input
-          id="price"
-          name="price"
-          type="number"
-          step="50"
-          min="0"
-          class="form-control"
-          placeholder="precio"
-          v-model="localProduct.price"
-          @blur="checkifnumber($event, 'price')"
-        />
-      </div>
+        <!-- Form -->
+        <form @submit.prevent="send">
 
-      <div class="mb-3">
-        <label for="pricesale" class="form-label">Precio de venta:</label>
-        <input
-          id="pricesale"
-          name="pricesale"
-          type="number"
-          step="50"
-          min="0"
-          class="form-control"
-          placeholder="precio de venta"
-          v-model="localProduct.pricesale"
-          @blur="checkifnumber($event, 'pricesale')"
-        />
-      </div>
+          <div class="row g-3">
 
-      <div class="mb-3">
-        <label for="comments" class="form-label">Comentarios:</label>
-        <textarea
-          id="comments"
-          name="comments"
-          class="form-control"
-          placeholder="comentarios"
-          v-model="localProduct.comments"
-        ></textarea>
-      </div>
+            <!-- Nombre -->
+            <div class="col-12">
+              <label for="name" class="form-label fw-semibold">
+                Nombre
+              </label>
 
-      <button type="submit" class="btn btn-secondary">Guardar</button>
-    </form>
+              <input
+                id="name"
+                type="text"
+                class="form-control form-control-lg"
+                placeholder="Nombre del producto"
+                v-model="localProduct.name"
+              />
 
-    <div class="container justify-content-end">
-      <div class="float-end">
-        <router-link class="btn btn-dark btn-sm" :to="{ name: 'products' }">
-          Atrás
-        </router-link>
+              <small
+                class="text-danger"
+                :class="isActive ? 'd-none' : 'd-block'"
+              >
+                Es necesario un nombre
+              </small>
+            </div>
+
+            <!-- Tipo -->
+            <div class="col-12 col-md-6">
+              <label for="type" class="form-label fw-semibold">
+                Tipo
+              </label>
+
+              <input
+                id="type"
+                type="text"
+                class="form-control"
+                placeholder="Tipo de producto"
+                v-model="localProduct.type"
+              />
+            </div>
+
+            <!-- Cantidad -->
+            <div class="col-12 col-md-6">
+              <label for="amount" class="form-label fw-semibold">
+                Cantidad
+              </label>
+
+              <input
+                id="amount"
+                type="number"
+                min="0"
+                class="form-control"
+                placeholder="0"
+                v-model="localProduct.amount"
+                @input="checkifnumber($event, 'amount')"
+              />
+            </div>
+
+            <!-- Precio -->
+            <div class="col-12 col-md-6">
+              <label for="price" class="form-label fw-semibold">
+                Precio
+              </label>
+
+              <input
+                id="price"
+                type="number"
+                min="0"
+                step="50"
+                class="form-control"
+                placeholder="0"
+                v-model="localProduct.price"
+                @blur="checkifnumber($event, 'price')"
+              />
+            </div>
+
+            <!-- Precio Venta -->
+            <div class="col-12 col-md-6">
+              <label for="pricesale" class="form-label fw-semibold">
+                Precio de venta
+              </label>
+
+              <input
+                id="pricesale"
+                type="number"
+                min="0"
+                step="50"
+                class="form-control"
+                placeholder="0"
+                v-model="localProduct.pricesale"
+                @blur="checkifnumber($event, 'pricesale')"
+              />
+            </div>
+
+            <!-- Comentarios -->
+            <div class="col-12">
+              <label for="comments" class="form-label fw-semibold">
+                Comentarios
+              </label>
+
+              <textarea
+                id="comments"
+                rows="4"
+                class="form-control"
+                placeholder="Comentarios adicionales..."
+                v-model="localProduct.comments"
+              />
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex flex-column flex-md-row gap-2 justify-content-end mt-4">
+
+            <router-link
+              class="btn btn-outline-dark"
+              :to="{ name: 'products' }"
+            >
+              Atrás
+            </router-link>
+
+            <button
+              type="submit"
+              class="btn btn-primary px-4"
+            >
+              Guardar
+            </button>
+
+          </div>
+
+        </form>
+
       </div>
     </div>
   </div>
@@ -160,3 +222,29 @@ async function send() {
   } catch (err) { console.error(err) }
 }
 </script>
+
+<style scoped>
+.card {
+  max-width: 900px;
+  margin: auto;
+}
+
+.form-control,
+.btn {
+  border-radius: 12px;
+}
+
+textarea {
+  resize: none;
+}
+
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1rem !important;
+  }
+
+  h3 {
+    font-size: 1.4rem;
+  }
+}
+</style>

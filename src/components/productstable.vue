@@ -1,39 +1,85 @@
 <template>
-  <table class="table table-hover table-sm">
-    <thead class="table-dark">
-      <tr v-if="$route.path === '/products'">
-        <th scope="col"># Id</th>
-        <th scope="col">NOMBRE</th>
-        <th scope="col">CANTIDAD</th>
-        <th scope="col">PRECIO DE VENTA</th>
-        <th scope="col" colspan="2">
-          <router-link to="/newproduct" class="btn btn-secondary">+</router-link>
-        </th>
-      </tr>
-      <tr v-else>
-        <th scope="row"></th>
-        <th scope="col">CANTIDAD</th>
-        <th scope="col">NOMBRE</th>
-        <th scope="col">PRECIO DE VENTA</th>
-      </tr>
-    </thead>
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-2 p-md-3">
 
-    <tbody v-if="$route.path === '/products'">
-      <productlistcomponent
-        v-for="(i, index) in products"
-        :product="i"
-        :key="index"
-      />
-    </tbody>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
 
-    <tbody v-else>
-      <productsalecomponent
-        v-for="(i, index) in products"
-        :product="i"
-        :key="index"
-      />
-    </tbody>
-  </table>
+          <thead class="table-dark">
+            <tr v-if="$route.path === '/products'">
+
+              <th class="text-nowrap">
+                # ID
+              </th>
+
+              <th>
+                NOMBRE
+              </th>
+
+              <th class="text-center">
+                CANTIDAD
+              </th>
+
+              <th class="text-end">
+                PRECIO
+              </th>
+
+              <th colspan="2" class="text-center" style="width: 140px;">
+
+                <router-link
+                  to="/newproduct"
+                  class="btn btn-sm btn-success rounded-circle fw-bold"
+                >
+                  +
+                </router-link>
+
+              </th>
+            </tr>
+
+            <tr v-else>
+
+              <th style="width: 50px;"></th>
+
+              <th class="text-center">
+                CANTIDAD
+              </th>
+
+              <th>
+                NOMBRE
+              </th>
+
+              <th class="text-end">
+                PRECIO
+              </th>
+
+            </tr>
+          </thead>
+
+          <tbody v-if="$route.path === '/products'">
+
+            <productlistcomponent
+              v-for="(i, index) in products"
+              :product="i"
+              :key="index"
+            />
+
+          </tbody>
+
+          <tbody v-else>
+
+            <productsalecomponent
+              v-for="(i, index) in products"
+              :product="i"
+              :key="index"
+            />
+
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -58,3 +104,32 @@ onMounted(() => loadproducts())
 watch(() => props.from, () => loadproducts())
 </script>
 
+<style scoped>
+table {
+  font-size: 0.95rem;
+}
+
+thead th {
+  white-space: nowrap;
+}
+
+tbody tr:hover {
+  transition: 0.2s;
+}
+
+.btn.rounded-circle {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 0.82rem;
+  }
+
+  .btn {
+    font-size: 0.75rem;
+  }
+}
+</style>

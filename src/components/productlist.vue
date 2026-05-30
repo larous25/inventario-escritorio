@@ -1,20 +1,40 @@
 <template>
-<tr>
-    <td> {{ product.product }} </td>
-    <td> {{ product.name }} </td>
-    <td> {{ product.amount }} </td>
-    <td> {{ product.pricesale }} </td>
+  <tr class="align-middle">
+    <td class="fw-semibold">
+      {{ product.product }}
+    </td>
+
     <td>
-      <router-link class="btn btn-secondary" to="/editproduct" @click="editProduct">
+      {{ product.name }}
+    </td>
+
+    <td class="text-center">
+      {{ product.amount }}
+    </td>
+
+    <td class="text-success fw-bold">
+      $ {{ product.pricesale }}
+    </td>
+
+    <td>
+      <router-link
+        class="btn btn-sm btn-outline-secondary w-100"
+        to="/editproduct"
+        @click="editProduct"
+      >
         Actualizar
       </router-link>
     </td>
+
     <td>
-      <button class="btn btn-danger" @click="remove">
+      <button
+        class="btn btn-sm btn-outline-danger w-100"
+        @click="remove"
+      >
         Eliminar
       </button>
     </td>
-</tr>
+  </tr>
 </template>
 
 <script setup>
@@ -64,3 +84,26 @@ function update() {
   router.push('/editproduct')
 }
 </script>
+
+<style scoped>
+button {
+  border-radius: 10px;
+  min-width: 42px;
+}
+
+td {
+  vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+
+  td {
+    font-size: 0.85rem;
+  }
+
+  button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+</style>
